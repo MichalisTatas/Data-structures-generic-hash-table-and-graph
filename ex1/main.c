@@ -39,7 +39,7 @@ int main(void)
     HTVisit(hash,visit);
     printf("Size of hash is : %d\n", HTSize(hash));
     printf("Sizedsfgdfgd gdsgfd : %d\n", hash->maxSize);
-    Destroy(hash);
+    HTDestroy(hash);
     free(pitem);
     return 0;
 }

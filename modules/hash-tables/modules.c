@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "modules.h"
+#include "hash-tables.h"
 
 HashTable* HTCreate()
 {
@@ -168,7 +168,7 @@ void destroy(HTNode* node)
 }
 
 
-void Destroy(HashTable* hash)
+void HTDestroy(HashTable* hash)
 {
     HTNode* list;
 
