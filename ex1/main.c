@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "modules.h"
+#include "hash-tables.h"
 
 void myvisit(HashTable* hash, char* key, HTItem* pitem)
 {

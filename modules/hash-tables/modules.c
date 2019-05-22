@@ -17,11 +17,13 @@ int HTSize(HashTable* hash)
 
 bool HTGet(HashTable* hash, char* key, HTItem* pitem)
 {
+    HTNode* temp;
+
     for(int i=0; i<hash->maxSize; i++)
     {
         if(hash->array[i] != NULL)
         {
-            HTNode* temp = hash->array[i];
+            temp = hash->array[i];
             while(temp != NULL)
             {
                 if(strcmp(temp->key, key)==0)
@@ -45,6 +47,7 @@ void RecursiveInsertAndDelete(HTNode* node, HashTable* hash)
 {
     if(node == NULL)
         return;
+
     RecursiveInsertAndDelete(node->next, hash);
     HTInsert(hash, node->key, node->item);
     free(node);
@@ -73,7 +76,6 @@ void InitializeHash(HashTable* hash)
     hash->array = malloc(hash->maxSize*sizeof(HTNode*));
     for(int i=0; i<hash->maxSize; i++)
     {
-        // hash->array[i] = malloc(sizeof(HTNode));
         hash->array[i] = NULL;
     }
 }
@@ -82,11 +84,14 @@ HashTable* HTInsert(HashTable* hash, char* key, HTItem item)
 {
     if(hash->size == 0)
         InitializeHash(hash);
+
     HTNode* temp;
     HTNode* node = malloc(sizeof(HTNode));
+
     node->key = key;
     node->item = item;
     node->next = NULL;
+
     int index = HashFunction(key, hash->maxSize);
     if(hash->array[index] == NULL)
     {
@@ -120,11 +125,14 @@ HashTable* HTInsert(HashTable* hash, char* key, HTItem item)
 
 void HTRemove(HashTable* hash, char* key)
 {
-    int index = HashFunction(key, hash->maxSize);
     HTNode* slow;
     HTNode* fast;
+
+    int index = HashFunction(key, hash->maxSize);
+
     fast = hash->array[index];
-    while(fast->key != key)
+
+     while(fast->key != key)
     {
         slow = fast;
         fast = fast->next;
@@ -138,6 +146,7 @@ void HTRemove(HashTable* hash, char* key)
     }
     else
         slow->next = fast->next;
+ 
     hash->size--;
     free(fast);
 }
@@ -145,6 +154,7 @@ void HTRemove(HashTable* hash, char* key)
 void HTVisit(HashTable* hash, void (*visit)(HashTable* hash, char* key, HTItem* pitem))
 {
     HTNode* temp;
+ 
     for(int i=0; i<hash->maxSize; i++)
     {
         if(hash->array[i] != NULL)
@@ -163,6 +173,7 @@ void destroy(HTNode* node)
 {
     if(node == NULL)
         return;
+ 
     destroy(node->next);
     free(node);
 }
