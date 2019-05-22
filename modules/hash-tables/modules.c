@@ -43,12 +43,15 @@ int HashFunction(char* key, int max)
 
 HashTable* reHashing(HashTable* hash)
 {
-    printf("Rehashing the hash due to number of nodes \n");
-    HashTable* table1  = HTCreate();
-    table1->maxSize = hash->maxSize*2;
-    // InitializeHash(table1);
+    HashTable* table;
     HTNode* list;
-    
+
+    printf("Rehashing the hash due to number of nodes \n");
+
+    // InitializeHash(table1);
+    table = HTCreate();
+    table->maxSize = hash->maxSize*2;
+
     for(int i=0; i<hash->maxSize; i++)
     {
         list = hash->array[i];
@@ -56,14 +59,13 @@ HashTable* reHashing(HashTable* hash)
         {
             while(list->next != NULL)
             {
-                HTInsert(table1, list->key, list->item);
+                HTInsert(table, list->key, list->item);
                 list = list->next;
             }
         }
     }
 
-    // hash = table1;
-    return table1;
+    return table;
 }
 
 void InitializeHash(HashTable* hash)
@@ -71,24 +73,27 @@ void InitializeHash(HashTable* hash)
     hash->array = malloc(hash->maxSize*sizeof(HTNode*));
     for(int i=0; i<hash->maxSize; i++)
     {
-        hash->array[i] = malloc(sizeof(HTNode));
         hash->array[i] = NULL;
     }
 }
 
 void HTInsert(HashTable* hash, char* key, HTItem item)
 {
+    HTNode* temp;
+    HTNode* node;
+    int index;
+
     if(hash->size == 0)
     {
-        hash->maxSize = 10;
         InitializeHash(hash);
     }
-    HTNode* temp;
-    HTNode* node = malloc(sizeof(HTNode));
+
+    node = malloc(sizeof(HTNode));
     node->key = key;
     node->item = item;
     node->next = NULL;
-    int index = HashFunction(key, hash->maxSize);
+    
+    index = HashFunction(key, hash->maxSize);
     if(hash->array[index] == NULL)
     {
         hash->array[index] = node;
@@ -113,8 +118,13 @@ void HTInsert(HashTable* hash, char* key, HTItem item)
             hash->size++;
         }
     }
-     if(hash->size/hash->maxSize > 0.9)
+
+    if(hash->size/hash->maxSize > 0.9)
+    {
+        HTPrint(hash);
         hash = reHashing(hash);
+        HTPrint(hash);
+    }
 }
 
 void HTRemove(HashTable* hash, char* key)
@@ -155,5 +165,24 @@ void HTVisit(HashTable* hash, void (*visit)(HashTable* hash, char* key, HTItem* 
                 temp = temp->next;    
             }
         }
+    }
+}
+
+void HTPrint(HashTable *hash)
+{
+    HashTable* myTable = hash;
+    HTNode* myNode;
+
+    printf("\n");
+    for(int i=0; i < myTable->maxSize; i++)
+    {
+        printf("[%2d] --> ", i);
+        myNode = myTable->array[i];
+        while(myNode != NULL)
+        {
+            printf("%s, ", myNode->key);
+            myNode = myNode->next;
+        }
+        printf("\n");
     }
 }

@@ -19,12 +19,13 @@ typedef struct HashTable
 
 void (*visit)(HashTable* hash, char* key, HTItem* pitem);
 HashTable* HTCreate();
-int HTSize(HashTable* hash);
-bool HTGet(HashTable* hash, char* key, HTItem* pitem);
-int HashFunction(char* key, int max);
-HashTable* reHashing(HashTable* hash);
-void HTInsert(HashTable* hash, char* key, HTItem item);
-void HTRemove(HashTable* hash, char* key);
-void HTVisit(HashTable* hash, void (*visit)(HashTable* hash, char* key, HTItem* pitem));
+int HTSize(HashTable*);
+bool HTGet(HashTable*, char*, HTItem*);
+int HashFunction(char*, int);
+HashTable* reHashing(HashTable*);
+void HTInsert(HashTable*, char*, HTItem);
+void HTRemove(HashTable*, char*);
+void HTVisit(HashTable*, void (*visit)(HashTable* hash, char* key, HTItem* pitem));
 
-void InitializeHash(HashTable* hash);
+void InitializeHash(HashTable*);
+void HTPrint(HashTable*);
