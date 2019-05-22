@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "stdbool.h"
 #include "modules.h"
+#include "queues.h"
 
 Graph* UGCreate(int n)
 {
@@ -191,9 +193,34 @@ Vertex* UGGetAdjacent(Graph* Graph, char* vertex)
     return list;
 }
 
+// Vertex* UGShortestPath(Graph* graph, char* vertex1, char* vertex2)
+// {
+//     typedef struct temp{                                 //to store the node and its parent
+//         Vertex* node;
+//         Vertex* parent;
+//         bool visited;
+//     }temp;
+    
+//     temp* array[graph->size];
+//     Vertex* iterator = graph->list;
+//     for(int i=0; i<graph->size; i++)
+//     {
+//         array[i] = malloc(sizeof(temp));
+//         array[i]->node = iterator;
+//         array[i]->parent = NULL;
+//         array[i]->visited = false;
+//         iterator = iterator->next;
+//     }
+
+//     Queue q;
+//     InitializeQueue(&q);
+//     Insert(array[0], &q);
+    
+// }
+
 void destroy(Graph* graph, Vertex* node)
 {
-    if(node == NULL)
+    if(node == NULL)                
         return;
     destroy(graph, node->next);
     UGRemoveVertex(graph, node->item);    
@@ -201,7 +228,7 @@ void destroy(Graph* graph, Vertex* node)
 
 void UGDestroy(Graph* graph)
 {
-    destroy(graph, graph->list);
+    destroy(graph, graph->list);                 //destroy the graph recursively     
 }
 
 void UGPrint(Graph graph)

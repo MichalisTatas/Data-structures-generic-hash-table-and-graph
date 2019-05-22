@@ -12,6 +12,7 @@ typedef struct HTNode
 typedef struct HashTable
 {
     int size;
+    int maxSize;
     HTNode** array;
 }HashTable;
 
@@ -20,8 +21,10 @@ void (*visit)(HashTable* hash, char* key, HTItem* pitem);
 HashTable* HTCreate();
 int HTSize(HashTable* hash);
 bool HTGet(HashTable* hash, char* key, HTItem* pitem);
-int HashFunction(char* key);
+int HashFunction(char* key, int max);
 HashTable* reHashing(HashTable* hash);
 void HTInsert(HashTable* hash, char* key, HTItem item);
 void HTRemove(HashTable* hash, char* key);
 void HTVisit(HashTable* hash, void (*visit)(HashTable* hash, char* key, HTItem* pitem));
+
+void InitializeHash(HashTable* hash);

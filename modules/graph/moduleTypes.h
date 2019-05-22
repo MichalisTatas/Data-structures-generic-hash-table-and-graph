@@ -1,3 +1,4 @@
+#pragma once
 typedef struct Vertex Vertex;
 
 typedef struct Node
