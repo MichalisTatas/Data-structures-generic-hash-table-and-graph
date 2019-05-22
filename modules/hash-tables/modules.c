@@ -41,29 +41,31 @@ int HashFunction(char* key, int max)
     return *key%max;
 }
 
+void RecursiveInsertAndDelete(HTNode* node, HashTable* hash)
+{
+    if(node == NULL)
+        return;
+    RecursiveInsertAndDelete(node->next, hash);
+    HTInsert(hash, node->key, node->item);
+    free(node);
+}
+
 HashTable* reHashing(HashTable* hash)
 {
-    printf("Rehashing the hash due to number of nodes \n");
-    HashTable* table1  = HTCreate();
-    table1->maxSize = hash->maxSize*2;
-    // InitializeHash(table1);
     HTNode* list;
+    
+    HashTable* table = HTCreate();
+    table->maxSize = hash->maxSize*2;
+
+    printf("Rehashing the hash due to number of nodes \n");
     
     for(int i=0; i<hash->maxSize; i++)
     {
         list = hash->array[i];
-        if(list != NULL)
-        {
-            while(list->next != NULL)
-            {
-                HTInsert(table1, list->key, list->item);
-                list = list->next;
-            }
-        }
+        RecursiveInsertAndDelete(list, table);
     }
 
-    // hash = table1;
-    return table1;
+    return table;
 }
 
 void InitializeHash(HashTable* hash)
@@ -71,18 +73,15 @@ void InitializeHash(HashTable* hash)
     hash->array = malloc(hash->maxSize*sizeof(HTNode*));
     for(int i=0; i<hash->maxSize; i++)
     {
-        hash->array[i] = malloc(sizeof(HTNode));
+        // hash->array[i] = malloc(sizeof(HTNode));
         hash->array[i] = NULL;
     }
 }
 
-void HTInsert(HashTable* hash, char* key, HTItem item)
+HashTable* HTInsert(HashTable* hash, char* key, HTItem item)
 {
     if(hash->size == 0)
-    {
-        hash->maxSize = 10;
         InitializeHash(hash);
-    }
     HTNode* temp;
     HTNode* node = malloc(sizeof(HTNode));
     node->key = key;
@@ -113,8 +112,10 @@ void HTInsert(HashTable* hash, char* key, HTItem item)
             hash->size++;
         }
     }
-     if(hash->size/hash->maxSize > 0.9)
+    if(hash->size/hash->maxSize > 0.9)
         hash = reHashing(hash);
+
+    return hash;       
 }
 
 void HTRemove(HashTable* hash, char* key)
@@ -156,4 +157,27 @@ void HTVisit(HashTable* hash, void (*visit)(HashTable* hash, char* key, HTItem* 
             }
         }
     }
+}
+
+void destroy(HTNode* node)
+{
+    if(node == NULL)
+        return;
+    destroy(node->next);
+    free(node);
+}
+
+
+void Destroy(HashTable* hash)
+{
+    HTNode* list;
+
+    for(int i=0; i<hash->maxSize; i++)
+    {
+        list = hash->array[i];
+        if(list!=NULL)
+          destroy(list);
+    }
+    free(hash->array);
+    free(hash);
 }

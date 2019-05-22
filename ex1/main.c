@@ -11,23 +11,26 @@ int main(void)
 {
     visit = myvisit;
     HashTable* hash = HTCreate();
-    HTInsert(hash, "foo", 5);
-    HTInsert(hash, "boo", 4);
-    HTInsert(hash, "goo", 6);
-    HTInsert(hash, "koo", 7);
-    HTInsert(hash, "loo", 3);
-    HTInsert(hash, "poo", 9);
+    hash->maxSize = 10;
+
+    hash = HTInsert(hash, "foo", 5);
+    hash = HTInsert(hash, "boo", 4);
+    hash = HTInsert(hash, "goo", 6);
+    hash = HTInsert(hash, "koo", 7);
+    hash = HTInsert(hash, "loo", 3);
+    hash = HTInsert(hash, "poo", 9);
     
     HTVisit(hash,visit);
 
     printf("Size of hash is : %d\n", HTSize(hash));
 
-    HTInsert(hash, "goo", 11);
-    HTInsert(hash, "doo", 45);
-    HTInsert(hash, "aoo", 23);
-    HTInsert(hash, "uoo", 2);
-    HTInsert(hash, "roo", 13);
-    HTInsert(hash, "woo", 16);
+    hash = HTInsert(hash, "goo", 11);
+    hash = HTInsert(hash, "doo", 45);
+    hash = HTInsert(hash, "aoo", 23);
+    hash = HTInsert(hash, "uoo", 2);
+    hash = HTInsert(hash, "roo", 13);
+    hash = HTInsert(hash, "woo", 16);
+
     HTItem* pitem = malloc(sizeof(int*));
     HTGet(hash, "koo", pitem);
     printf("HTget value : %d \n",*pitem);
@@ -35,6 +38,8 @@ int main(void)
 
     HTVisit(hash,visit);
     printf("Size of hash is : %d\n", HTSize(hash));
-    // printf("Sizedsfgdfgd gdsgfd : %d\n", hash->maxSize);
+    printf("Sizedsfgdfgd gdsgfd : %d\n", hash->maxSize);
+    Destroy(hash);
+    free(pitem);
     return 0;
 }

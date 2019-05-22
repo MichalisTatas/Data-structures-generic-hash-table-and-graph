@@ -23,8 +23,11 @@ int HTSize(HashTable* hash);
 bool HTGet(HashTable* hash, char* key, HTItem* pitem);
 int HashFunction(char* key, int max);
 HashTable* reHashing(HashTable* hash);
-void HTInsert(HashTable* hash, char* key, HTItem item);
+HashTable* HTInsert(HashTable* hash, char* key, HTItem item);
 void HTRemove(HashTable* hash, char* key);
 void HTVisit(HashTable* hash, void (*visit)(HashTable* hash, char* key, HTItem* pitem));
+void RecursiveInsertAndDelete(HTNode* node, HashTable* hash);
+void Destroy(HashTable* hash);
+void destroy(HTNode* node);
 
 void InitializeHash(HashTable* hash);
