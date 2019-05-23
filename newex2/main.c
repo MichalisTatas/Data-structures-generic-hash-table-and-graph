@@ -1,11 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "graph.h"
 
 int main(void)
 {
     UGGraph* graph = UGCreate();
-    graph->Size = 20;
-    graph->hash->maxSize = 20;
+    graph->Size = 10;
+    graph->hash->maxSize = 10;
 
     UGAddVertex(graph, "foo");
     UGAddVertex(graph, "goo");
@@ -20,10 +21,13 @@ int main(void)
 
     printf("number of vertexes after deletion is : %d \n", HTSize(graph->hash));
 
-    UGAddEdge(graph, "foo", "joo");
+    UGAddEdge(graph, "foo", "loo");
 
+    // HTItem temp = malloc(sizeof(HTItem));
     HTItem temp = UGGetAdjacent(graph, "foo");
-    if(temp->adjacentNode == NULL)
-        printf("POUTSOS");
+    if(temp != NULL)
+        if(temp->adjacentNode == NULL)
+            printf(" qeef \n");
+    UGDestroy(graph);
     return 0;
 }

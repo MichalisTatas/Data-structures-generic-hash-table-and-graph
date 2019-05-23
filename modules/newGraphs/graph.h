@@ -11,7 +11,7 @@ typedef struct UGGraph
 UGGraph* UGCreate();
 void UGAddVertex(UGGraph* graph, char* vertex);
 void UGRemoveVertex(UGGraph* graph, char* vertex);
-void UGAddEdge(UGGraph* graph, char* vertex1, char* vertex2);
+UGGraph* UGAddEdge(UGGraph* graph, char* vertex1, char* vertex2);
 // void UGRemoveEdge(UGGraph* graph, char* vertex1, char* vertex2);
 HTItem UGGetAdjacent(UGGraph* graph, char* vertex);
 // UGShortestPath(UGGraph* graph, char* vertex1, char* vertex2);
