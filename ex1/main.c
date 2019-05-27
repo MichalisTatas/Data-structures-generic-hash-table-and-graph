@@ -12,7 +12,7 @@ int main(void)
     visit = myvisit;
     HashTable* hash = HTCreate();
     hash->maxSize = 10;
-
+   
     hash = HTInsert(hash, "foo", 5);
     hash = HTInsert(hash, "boo", 4);
     hash = HTInsert(hash, "goo", 6);
