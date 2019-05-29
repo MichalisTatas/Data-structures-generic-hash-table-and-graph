@@ -30,6 +30,8 @@ void HTRemove(HashTable* hash, char* key);
 void HTVisit(HashTable* hash, void (*visit)(HashTable* hash, char* key, HTItem pitem));
 void HTDestroy(HashTable* hash);
 
+void printht(HashTable* hash);
+void printstring(HashTable* hash);
 HTItem* AssignValue(HashTable* hash, HTItem initial, HTItem destination);
 void InitializeHash(HashTable* hash);
 HashTable* reHashing(HashTable* hash);

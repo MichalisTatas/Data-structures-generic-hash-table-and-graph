@@ -13,7 +13,7 @@ void myvisit(HashTable* hash, char* key, HTItem pitem) {
 
 void integers() {
     visit = myvisit;
-    printf("peaki ali8eias\n");
+    
     HashTable* hash = HTCreate(sizeof(int*) ,false);
     hash->maxSize = 5;
     HTItem intptr1 = malloc(sizeof(int));
@@ -34,17 +34,21 @@ void integers() {
 
     HTItem* pitem = malloc(sizeof(int));
     HTGet(hash, "foo", pitem);
-    printf("%d \n", *(int*)pitem);
+    printf("pitem = %d  \n", *(int*)pitem);
 
     printf("Size of hash is : %d\n", HTSize(hash));
 
-    HTVisit(hash,visit);
+    // HTVisit(hash,visit);
+
+    printht(hash);
 
     HTRemove(hash, "goo");
 
     printf("Size of hash is : %d\n", HTSize(hash));
 
-    HTVisit(hash,visit);
+    // HTVisit(hash,visit);
+    
+    printht(hash);
 
     HTDestroy(hash);
 }
@@ -64,7 +68,7 @@ void strings() {
     
     HTItem intptr2 = malloc(sizeof(char*));
     intptr2 = (char*)"mixalh";
-    hash = HTInsert(hash, "boo", intptr2);
+    hash = HTInsert(hash, "goo", intptr2);
 
     HTItem intptr3 = malloc(sizeof(char*));
     intptr3 = (char*)"tata";
@@ -75,7 +79,7 @@ void strings() {
     hash = HTInsert(hash, "loo", intptr4);
 
     HTItem intptr5 = malloc(sizeof(char*));
-    intptr5 = (char*)"kwlo";
+    intptr5 = (char*)"zwo";
     hash = HTInsert(hash, "hoo", intptr5);
     
     HTItem intptr6 = malloc(sizeof(char*));
@@ -93,11 +97,13 @@ void strings() {
 
     printf("Size of hash is : %d\n", HTSize(hash));
 
-    HTVisit(hash,visit);
+    // HTVisit(hash,visit);
+    printstring(hash);
 
     HTRemove(hash, "goo");
 
-    HTVisit(hash,visit);
+    // HTVisit(hash,visit);
+    printstring(hash);
 
     HTDestroy(hash);
 }

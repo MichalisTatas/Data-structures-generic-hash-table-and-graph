@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "hash-tables.h"
-int MAXSIZE = 5;
+int MAXSIZE = 10;
 
 
 HashTable* HTCreate(int dataSize, bool isString)
@@ -76,22 +76,22 @@ HashTable* reHashing(HashTable* hash)
     {
         list = hash->array[i];
         RecursiveInsertAndDelete(list, table);
-    }
+    } 
 
     return table;
 }
 
-HTItem* AssignValue(HashTable* hash, HTItem initial, HTItem destination) {
-    //strings are a special ocassion 
-    //we need to call strlen as 3rd argument of memcpy
-    if(hash->isString == true) {
-        memcpy(destination, initial, strlen(initial)+1);
-    } 
-    else {
-        memcpy(destination, initial, hash->dataSize);   //ht->data_size = sizeof(type)
-    }
-    return destination;
-}
+// HTItem* AssignValue(HashTable* hash, HTItem initial, HTItem destination) {
+//     //strings are a special ocassion 
+//     //we need to call strlen as 3rd argument of memcpy
+//     if(hash->isString == true) {
+//         memcpy(destination, initial, strlen(initial)+1);
+//     } 
+//     else {
+//         memcpy(destination, initial, hash->dataSize);   //ht->data_size = sizeof(type)
+//     }
+//     return destination;
+// }
 
 
 HashTable* HTInsert(HashTable* hash, char* key, HTItem item)
@@ -188,7 +188,7 @@ void destroy(HTNode* node)
     if(node == NULL)
         return;
  
-    destroy(node->next);
+    destroy(node->next);   
     free(node);
 }
 
@@ -206,3 +206,52 @@ void HTDestroy(HashTable* hash)
     free(hash->array);
     free(hash);
 }
+
+
+void printht(HashTable* hash) {
+    HTNode* temp;
+
+    for(int i=0; i<MAXSIZE; i++) {
+         temp = hash->array[i];
+         if(temp != NULL)
+         {
+            printf("%s -->", temp->key);
+            if(temp->next != NULL) {
+                while(temp->next != NULL) {
+                    temp = temp->next;
+                    printf("%s -->", temp->key);
+                }
+            }
+            printf("\n");
+         }
+    }
+}
+
+
+void printstring(HashTable* hash) {
+    HTNode* temp;
+
+    for(int i=0; i<MAXSIZE; i++) {
+         temp = hash->array[i];
+         if(temp != NULL)
+         {
+            printf("%s -->", (char*)temp->item);
+            if(temp->next != NULL) {
+                while(temp->next != NULL) {
+                    temp = temp->next;
+                    printf("%s -->", (char*)temp->item);
+                }
+            }
+            printf("\n");
+         }
+    }
+}
+
+
+
+
+
+
+
+
+

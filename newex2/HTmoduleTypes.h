@@ -4,3 +4,5 @@ typedef struct node{
 }node;
 
 typedef node* HTItem;
+
+// typedef void* HTItem;
