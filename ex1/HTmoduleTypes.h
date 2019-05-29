@@ -1,5 +1,5 @@
 
-typedef int HTItem;
+typedef void* HTItem;
 
 // typedef union
 // {

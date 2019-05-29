@@ -2,11 +2,21 @@
 #include <stdlib.h>
 #include <string.h>
 #include "hash-tables.h"
+int MAXSIZE = 5;
 
-HashTable* HTCreate()
+
+HashTable* HTCreate(int dataSize, bool isString)
 {
     HashTable* table = malloc(sizeof(HashTable));
     table->size = 0;
+    table->dataSize = dataSize;
+    table->isString = isString;
+    table->maxSize = MAXSIZE;
+    table->array = malloc(table->maxSize*sizeof(HTNode*));
+    for(int i=0; i<table->maxSize; i++)
+    {
+        table->array[i] = NULL;
+    }
     return table;
 }
 
@@ -29,6 +39,7 @@ bool HTGet(HashTable* hash, char* key, HTItem* pitem)
                 if(strcmp(temp->key, key)==0)
                 {
                     *pitem = temp->item;
+                    // AssignValue(hash, te mp->item, pitem);
                     return true;
                 }
                 temp = temp->next;    
@@ -56,13 +67,12 @@ void RecursiveInsertAndDelete(HTNode* node, HashTable* hash)
 HashTable* reHashing(HashTable* hash)
 {
     HTNode* list;
-    
-    HashTable* table = HTCreate();
-    table->maxSize = hash->maxSize*2;
+    MAXSIZE = MAXSIZE*2;
+    HashTable* table = HTCreate(hash->dataSize ,hash->isString);
 
     printf("Rehashing the hash due to number of nodes \n");
     
-    for(int i=0; i<hash->maxSize; i++)
+    for(int i=0; i<MAXSIZE/2; i++)
     {
         list = hash->array[i];
         RecursiveInsertAndDelete(list, table);
@@ -71,25 +81,29 @@ HashTable* reHashing(HashTable* hash)
     return table;
 }
 
-void InitializeHash(HashTable* hash)
-{
-    hash->array = malloc(hash->maxSize*sizeof(HTNode*));
-    for(int i=0; i<hash->maxSize; i++)
-    {
-        hash->array[i] = NULL;
+HTItem* AssignValue(HashTable* hash, HTItem initial, HTItem destination) {
+    //strings are a special ocassion 
+    //we need to call strlen as 3rd argument of memcpy
+    if(hash->isString == true) {
+        memcpy(destination, initial, strlen(initial)+1);
+    } 
+    else {
+        memcpy(destination, initial, hash->dataSize);   //ht->data_size = sizeof(type)
     }
+    return destination;
 }
+
 
 HashTable* HTInsert(HashTable* hash, char* key, HTItem item)
 {
-    if(hash->size == 0)
-        InitializeHash(hash);
-
     HTNode* temp;
     HTNode* node = malloc(sizeof(HTNode));
 
-    node->key = key;
+    // node->key = key;
+    node->key = malloc(sizeof(char*));
+    strcpy(node->key, key);
     node->item = item;
+    // AssignValue(hash, item, node->item);
     node->next = NULL;
 
     int index = HashFunction(key, hash->maxSize);
@@ -132,7 +146,7 @@ void HTRemove(HashTable* hash, char* key)
 
     fast = hash->array[index];
 
-     while(fast->key != key)
+     while(strcmp(fast->key ,key) != 0)
     {
         slow = fast;
         fast = fast->next;
@@ -151,7 +165,7 @@ void HTRemove(HashTable* hash, char* key)
     free(fast);
 }
 
-void HTVisit(HashTable* hash, void (*visit)(HashTable* hash, char* key, HTItem* pitem))
+void HTVisit(HashTable* hash, void (*visit)(HashTable* hash, char* key, HTItem pitem))
 {
     HTNode* temp;
  
@@ -162,7 +176,7 @@ void HTVisit(HashTable* hash, void (*visit)(HashTable* hash, char* key, HTItem* 
             temp = hash->array[i];
             while(temp != NULL)
             {
-                visit(hash, temp->key, &temp->item);
+                visit(hash, temp->key, temp->item);
                 temp = temp->next;    
             }
         }
