@@ -38,8 +38,8 @@ bool HTGet(HashTable* hash, char* key, HTItem* pitem)
             {
                 if(strcmp(temp->key, key)==0)
                 {
-                    *pitem = temp->item;
-                    // AssignValue(hash, te mp->item, pitem);
+                    pitem = &temp->item;
+                    // AssignValue(hash, temp->item, pitem);
                     return true;
                 }
                 temp = temp->next;    
