@@ -76,7 +76,7 @@ int main(void)
 
     printgraph(graph->hash);
 
-    UGRemoveEdge(graph, "foo", "hoo");
+    UGRemoveEdge(graph, "joo", "koo");
 
     printf("\nRemoving edge between foo and loo : \n\n");
 
