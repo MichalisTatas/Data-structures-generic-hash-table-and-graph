@@ -91,39 +91,48 @@ UGGraph* UGAddEdge(UGGraph* graph, char* vertex1, char* vertex2)
 
 void UGRemoveEdge(UGGraph* graph, char* vertex1, char* vertex2)
 {
-    HTNode* temp = findVertex(graph, vertex1);
-    HTItem* fast;
-    HTItem* slow;
+    HTNode* temp1 = findVertex(graph, vertex1);
+    HTNode* temp2 = findVertex(graph, vertex2);
+    HTItem fast;
+    HTItem slow;
 
-    fast = &temp->item;
-    while(strcmp((*fast)->adjacentNode->key, vertex2)) {
-        slow = fast;
-        *fast = (*fast)->next;
+    slow = temp1->item;
+    if(slow->next == NULL) {
+        temp1->item = NULL;
+        free(slow);
     }
-    if(memcmp(fast, &temp->item, sizeof(HTItem)) == 0) {
-        if((*fast)->next == NULL)
-            temp->item = NULL;
-        else
-            temp->item = (*fast)->next;
+    else if(!strcmp(slow->adjacentNode->key, vertex2)) {
+        temp1->item = slow->next;
+        free(slow);
     }
-    else
-        (*slow)->next = (*fast)->next;
+    else {
+        fast = slow->next;
+        while(strcmp(fast->adjacentNode->key, vertex2)) {
+            slow = fast->next;
+            fast = fast->next;
+        }
+        slow->next = fast->next;
+        free(fast);
+    }
 
-
-    HTNode* temp1 = findVertex(graph, vertex2);
-    fast = &temp1->item;
-    while(strcmp((*fast)->adjacentNode->key, vertex1)) {
-        slow = fast;
-        *fast = (*fast)->next;
+    slow = temp2->item;
+    if(slow->next == NULL) {
+        temp2->item = NULL;
+        free(slow);
     }
-    if(memcmp(fast, &temp->item, sizeof(HTItem)) == 0) {
-        if((*fast)->next == NULL)
-            temp1->item = NULL;
-        else
-            temp1->item = (*fast)->next;
+    else if(!strcmp(slow->adjacentNode->key, vertex1)) {
+        temp2->item = slow->next;
+        free(slow);
     }
-    else
-        (*slow)->next = (*fast)->next;
+    else {
+        fast = slow->next;
+        while(strcmp(fast->adjacentNode->key, vertex1)) {
+            slow = fast->next;
+            fast = fast->next;
+        }
+        slow->next = fast->next;
+        free(fast);
+    }
 }
 
 HTItem UGGetAdjacent(UGGraph* graph, char* vertex)
