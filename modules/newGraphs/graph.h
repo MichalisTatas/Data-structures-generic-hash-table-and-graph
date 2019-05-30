@@ -18,3 +18,6 @@ void UGRemoveEdge(UGGraph* graph, char* vertex1, char* vertex2);
 HTItem UGGetAdjacent(UGGraph* graph, char* vertex);
 // UGShortestPath(UGGraph* graph, char* vertex1, char* vertex2);
 void UGDestroy(UGGraph* graph);
+
+void recursiveDeleteAdjacentList(UGGraph* graph, char* vertex, HTItem item);
+HTNode* findVertex(UGGraph* graph, char* vertex);

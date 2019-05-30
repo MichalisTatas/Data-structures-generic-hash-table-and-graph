@@ -76,9 +76,15 @@ int main(void)
 
     printgraph(graph->hash);
 
-    UGRemoveEdge(graph, "joo", "koo");
+    UGRemoveEdge(graph, "hoo", "foo");
 
     printf("\nRemoving edge between foo and loo : \n\n");
+
+    printgraph(graph->hash);
+
+    printf("\nRemoving vertex loo : \n\n");
+
+    UGRemoveVertex(graph, "loo");
 
     printgraph(graph->hash);
     // // HTItem temp = malloc(sizeof(HTItem));

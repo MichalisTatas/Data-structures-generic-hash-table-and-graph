@@ -18,9 +18,19 @@ void UGAddVertex(UGGraph* graph, char* vertex)
     graph->hash = HTInsert(graph->hash, vertex, temp);
 }
 
+void recursiveDeleteAdjacentList(UGGraph* graph, char* vertex, HTItem item) //destroys the adjacent list of a node recursively
+{
+    if(item == NULL)
+        return;
+    recursiveDeleteAdjacentList(graph, vertex, item->next);
+    UGRemoveEdge(graph, vertex, item->adjacentNode->key);
+}
+
 void UGRemoveVertex(UGGraph* graph, char* vertex)
 {
-    HTRemove(graph->hash, vertex);   //how to remove it from any adjacent list
+    HTNode* vertex1pointer = findVertex(graph, vertex);
+    recursiveDeleteAdjacentList(graph, vertex, vertex1pointer->item);   
+    HTRemove(graph->hash, vertex);
 }
 
 HTNode* findVertex(UGGraph* graph, char* vertex)       //returns pointer to vertex in the hash table
@@ -52,7 +62,6 @@ UGGraph* UGAddEdge(UGGraph* graph, char* vertex1, char* vertex2)
     
     HTItem* pitem = malloc(sizeof(HTItem));
     *pitem = vertex1pointer->item;
-    // HTGet(graph->hash, vertex1, pitem);
 
     if((*pitem) != NULL) {
         while((*pitem)->next != NULL)
@@ -71,7 +80,6 @@ UGGraph* UGAddEdge(UGGraph* graph, char* vertex1, char* vertex2)
     
     HTItem* pitem1  = malloc(sizeof(HTItem));
     *pitem1 = vertex2pointer->item;
-    // HTGet(graph->hash, vertex2, pitem1);
 
     if((*pitem1) != NULL) {
         while((*pitem1)->next != NULL)
