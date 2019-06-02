@@ -87,11 +87,6 @@ int main(void)
     UGRemoveVertex(graph, "loo");
 
     printgraph(graph->hash);
-    // // HTItem temp = malloc(sizeof(HTItem));
-    // HTItem temp = UGGetAdjacent(graph, "foo");
-    // if(temp != NULL)
-    //     if(temp->adjacentNode == NULL)
-    //         printf(" qeef \n");
     // UGDestroy(graph);
     return 0;
 }
