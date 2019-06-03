@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "graph.h"
-    
+
 void printgraph(HashTable* hash) {
     HTNode* temp;
     node* mike;
@@ -26,8 +26,8 @@ void printgraph(HashTable* hash) {
 int main(void)
 {
     UGGraph* graph = UGCreate(sizeof(int), false);
-    graph->Size = 10;
-    graph->hash->maxSize = 10;
+    // graph->Size = 10;
+    // graph->hash->maxSize = 10;
 
     UGAddVertex(graph, "foo");
     UGAddVertex(graph, "goo");
@@ -60,6 +60,9 @@ int main(void)
     UGRemoveVertex(graph, "loo");
 
     printgraph(graph->hash);
+
+    UGShortestPath(graph, "foo", "koo");
+
     UGDestroy(graph);
     return 0;
 }

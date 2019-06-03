@@ -162,6 +162,39 @@ HTItem UGGetAdjacent(UGGraph* graph, char* vertex)
     return temp;
 }
 
+UGGraph* CreateDataGraph(UGGraph* graph)           //copies the given graph to a new one and returns it
+{
+    UGGraph* DataGraph = UGCreate(sizeof(int), false);
+    
+    HTNode* vertextpr;
+    for(int i=0; i<graph->hash->maxSize; i++) {
+
+        vertextpr = graph->hash->array[i];
+        if(vertextpr != NULL) {
+            UGAddVertex(DataGraph, vertextpr->key);
+
+            if(vertextpr->next != NULL) {
+                while(vertextpr != NULL) {
+                    UGAddVertex(DataGraph, vertextpr->key);
+                    vertextpr = vertextpr->next;
+                }
+            }
+        }
+    }    
+    return DataGraph;
+}
+
+HTItem UGShortestPath(UGGraph* graph, char* vertex1, char* vertex2)
+{
+    //first i need yo create a graph with the same
+    //keys but with the struct data as HTItem
+    UGGraph* DataGraph = CreateDataGraph(graph);
+    
+    
+    
+    // return ?
+}
+
 void UGDestroy(UGGraph* graph)
 {
     HTDestroy(graph->hash);
