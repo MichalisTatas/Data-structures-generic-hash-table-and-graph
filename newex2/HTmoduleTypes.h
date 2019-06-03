@@ -3,6 +3,4 @@ typedef struct node{
     struct node* next;
 }node;
 
-// typedef node* HTItem;
-
 typedef void* HTItem;       
