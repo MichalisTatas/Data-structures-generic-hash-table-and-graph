@@ -14,11 +14,11 @@ UGGraph* UGCreate(int dataSize ,bool isString)
 
 void UGAddVertex(UGGraph* graph, char* vertex)
 {
-    HTItem temp = NULL;    
+    HTItem temp = NULL;                             
     graph->hash = HTInsert(graph->hash, vertex, temp);
 }
 
-void recursiveDeleteAdjacentList(UGGraph* graph, char* vertex, HTItem item) //destroys the adjacent list of a node recursively
+void recursiveDeleteAdjacentList(UGGraph* graph, char* vertex, node* item) //destroys the adjacent list of a node recursively
 {
     if(item == NULL)
         return;
@@ -60,38 +60,48 @@ UGGraph* UGAddEdge(UGGraph* graph, char* vertex1, char* vertex2)
     
     // first insert vertex2 in the adjacent list of vertex1
     
-    HTItem* pitem = malloc(sizeof(HTItem));
-    *pitem = vertex1pointer->item;
+    node* pitem; // = malloc(sizeof(HTItem));
+    pitem = vertex1pointer->item;
 
-    if((*pitem) != NULL) {
-        while((*pitem)->next != NULL)
-            (*pitem) = (*pitem)->next;
-        (*pitem)->next = malloc(sizeof(HTItem));
-        (*pitem)->next->adjacentNode = vertex2pointer;
-        (*pitem)->next->next = NULL; 
+    if(pitem != NULL) {
+        while(pitem->next != NULL)
+            pitem = pitem->next;
+        pitem->next = malloc(sizeof(HTItem));
+        pitem->next->adjacentNode = vertex2pointer;
+        pitem->next->next = NULL; 
     }   
     else {
         vertex1pointer->item = malloc(sizeof(HTItem*));
-        vertex1pointer->item->adjacentNode = vertex2pointer;
-        vertex1pointer->item->next = NULL;
+        pitem = vertex1pointer->item;
+        pitem->adjacentNode = malloc(sizeof(HTNode));
+        pitem->adjacentNode = vertex2pointer;
+        pitem->next = NULL;
+        // vertex1pointer->item = pitem;
+        // vertex1pointer->item->adjacentNode = vertex2pointer;
+        // vertex1pointer->item->next = NULL;
     } 
 
     // second insert vertex1 int the adjacent list of vertex2
     
-    HTItem* pitem1  = malloc(sizeof(HTItem));
-    *pitem1 = vertex2pointer->item;
+    node* pitem1  = malloc(sizeof(HTItem));
+    pitem1 = vertex2pointer->item;
 
-    if((*pitem1) != NULL) {
-        while((*pitem1)->next != NULL)
-            (*pitem1) = (*pitem1)->next;
-        (*pitem1)->next = malloc(sizeof(HTItem));
-        (*pitem1)->next->adjacentNode = vertex1pointer;
-        (*pitem1)->next->next = NULL; 
+    if(pitem1 != NULL) {
+        while(pitem1->next != NULL)
+            pitem1 = pitem1->next;
+        pitem1->next = malloc(sizeof(HTItem));
+        pitem1->next->adjacentNode = vertex1pointer;
+        pitem1->next->next = NULL; 
     }   
     else {
         vertex2pointer->item = malloc(sizeof(HTItem*));
-        vertex2pointer->item->adjacentNode = vertex1pointer;
-        vertex2pointer->item->next = NULL;
+        pitem1 = vertex2pointer->item;
+        pitem1->adjacentNode = malloc(sizeof(HTNode));
+        pitem1->adjacentNode = vertex1pointer;
+        pitem1->next = NULL;
+        // vertex2pointer->item = pitem1;
+        // vertex2pointer->item->adjacentNode = vertex1pointer;
+        // vertex2pointer->item->next = NULL;
     }
     
     return graph;
@@ -101,8 +111,8 @@ void UGRemoveEdge(UGGraph* graph, char* vertex1, char* vertex2)
 {
     HTNode* temp1 = findVertex(graph, vertex1);
     HTNode* temp2 = findVertex(graph, vertex2);
-    HTItem fast;
-    HTItem slow;
+    node* fast = malloc(sizeof(node));
+    node* slow = malloc(sizeof(node));
 
     slow = temp1->item;
     if(slow->next == NULL) {
