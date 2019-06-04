@@ -60,7 +60,7 @@ UGGraph* UGAddEdge(UGGraph* graph, char* vertex1, char* vertex2)
     
     // first insert vertex2 in the adjacent list of vertex1
     
-    node* pitem; // = malloc(sizeof(HTItem));
+    node* pitem;
     pitem = vertex1pointer->item;
 
     if(pitem != NULL) {
@@ -76,9 +76,6 @@ UGGraph* UGAddEdge(UGGraph* graph, char* vertex1, char* vertex2)
         pitem->adjacentNode = malloc(sizeof(HTNode));
         pitem->adjacentNode = vertex2pointer;
         pitem->next = NULL;
-        // vertex1pointer->item = pitem;
-        // vertex1pointer->item->adjacentNode = vertex2pointer;
-        // vertex1pointer->item->next = NULL;
     } 
 
     // second insert vertex1 int the adjacent list of vertex2
@@ -99,9 +96,6 @@ UGGraph* UGAddEdge(UGGraph* graph, char* vertex1, char* vertex2)
         pitem1->adjacentNode = malloc(sizeof(HTNode));
         pitem1->adjacentNode = vertex1pointer;
         pitem1->next = NULL;
-        // vertex2pointer->item = pitem1;
-        // vertex2pointer->item->adjacentNode = vertex1pointer;
-        // vertex2pointer->item->next = NULL;
     }
     
     return graph;
@@ -180,7 +174,8 @@ UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph)           //copies the given
                 }
             }
         }
-    }    
+    }
+    
     return DataGraph;
 }
 
@@ -190,9 +185,7 @@ HTItem UGShortestPath(UGGraph* graph, char* vertex1, char* vertex2)
     //keys but with the struct data as HTItem
     UGGraph* DataGraph = DuplicateGraphWithoutEdges(graph); 
     
-
     
-    //loop all the elements in the
 
     UGDestroy(DataGraph);
     // return ?
@@ -203,3 +196,28 @@ void UGDestroy(UGGraph* graph)
     HTDestroy(graph->hash);
     free(graph);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
