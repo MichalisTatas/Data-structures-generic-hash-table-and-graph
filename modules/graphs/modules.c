@@ -186,12 +186,15 @@ UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph)           //copies the given
 
 HTItem UGShortestPath(UGGraph* graph, char* vertex1, char* vertex2)
 {
-    //first i need yo create a graph with the same
+    //first i need to create a graph with the same
     //keys but with the struct data as HTItem
-    UGGraph* DataGraph = DuplicateGraphWithoutEdges(graph);
+    UGGraph* DataGraph = DuplicateGraphWithoutEdges(graph); 
     
+
     
-    
+    //loop all the elements in the
+
+    UGDestroy(DataGraph);
     // return ?
 }
 
@@ -200,24 +203,3 @@ void UGDestroy(UGGraph* graph)
     HTDestroy(graph->hash);
     free(graph);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
