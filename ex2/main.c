@@ -1,51 +1,68 @@
-#include<stdio.h>
-#include "modules.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "graph.h"
+
+void printgraph(HashTable* hash) {
+    HTNode* temp;
+    node* mike;
+    for(int i=0; i<hash->maxSize; i++) {
+         temp = hash->array[i];
+         if(temp != NULL)
+         {
+            printf("%s -->", (char*)temp->key);
+            if(temp->item != NULL) {
+                // printf(" %s ", (char*)temp->item->adjacentNode->key);
+                mike = temp->item;
+                while(mike != NULL) {
+                    printf(" %s -->", mike->adjacentNode->key);
+                    mike = mike->next;
+                }
+            }
+            printf("\n");
+         }
+    }
+}
 
 int main(void)
 {
-    Graph* graph;
-
-    graph = UGCreate(7);
+    UGGraph* graph = UGCreate(sizeof(int), false);
+    // graph->Size = 10;
+    // graph->hash->maxSize = 10;
 
     UGAddVertex(graph, "foo");
     UGAddVertex(graph, "goo");
-    UGAddVertex(graph, "poo");
     UGAddVertex(graph, "hoo");
+    UGAddVertex(graph, "joo");
     UGAddVertex(graph, "koo");
     UGAddVertex(graph, "loo");
-    UGAddVertex(graph, "doo");
-    UGAddVertex(graph, "boo");
 
-    UGAddEdge(graph, "foo", "loo");
-    UGAddEdge(graph, "foo", "boo");
-    UGAddEdge(graph, "foo", "goo");
+    printf("number of vertexes is : %d \n\n", HTSize(graph->hash));
+
+    UGRemoveVertex(graph, "goo");
+
+    printf("number of vertexes after deletion is : %d \n\n", HTSize(graph->hash));
+
     UGAddEdge(graph, "foo", "hoo");
-    UGAddEdge(graph, "hoo", "boo");
-    UGAddEdge(graph, "hoo", "goo");
-    UGPrint(*graph);
+    UGAddEdge(graph, "foo", "loo");
+    UGAddEdge(graph, "joo", "koo");
 
-    printf("\nRemoving edge loo, foo \n");
-    UGRemoveEdge(graph, "loo", "foo");
-    UGPrint(*graph);
-    
-    printf("\nRemoving vertex foo \n");
-    UGRemoveVertex(graph, "foo");
-    UGPrint(*graph);
 
-    printf("\nRemoving vertex koo \n");
-    UGRemoveVertex(graph, "koo");
-    UGPrint(*graph);
+    printgraph(graph->hash);
 
-    Vertex* vertex = UGGetAdjacent(graph, "hoo");
-    printf("\nAdjacent list is : ");
-    while(vertex != NULL)
-    {
-        printf("%s  ", vertex->item);
-        vertex = vertex->next;
-    }
+    UGRemoveEdge(graph, "foo", "hoo");
+
+    printf("\nRemoving edge between foo and hoo : \n\n");
+
+    printgraph(graph->hash);
+
+    printf("\nRemoving vertex loo : \n\n");
+
+    UGRemoveVertex(graph, "loo");
+
+    printgraph(graph->hash);
+
+    UGShortestPath(graph, "foo", "koo");
 
     UGDestroy(graph);
-    UGPrint(*graph);
-
     return 0;
 }

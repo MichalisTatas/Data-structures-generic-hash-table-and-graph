@@ -6,7 +6,7 @@ PROGRAM = ex2
 
 OBJS = main.o
 
-include $(MODULES)/graph/make.inc
+include $(MODULES)/graphs/make.inc
 
 $(PROGRAM): clean $(OBJS)
 	gcc $(OBJS) -o $(PROGRAM)

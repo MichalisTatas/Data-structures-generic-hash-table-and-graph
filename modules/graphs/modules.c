@@ -162,7 +162,7 @@ HTItem UGGetAdjacent(UGGraph* graph, char* vertex)
     return temp;
 }
 
-UGGraph* CreateDataGraph(UGGraph* graph)           //copies the given graph to a new one and returns it
+UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph)           //copies the given graph to a new one and returns it
 {
     UGGraph* DataGraph = UGCreate(sizeof(int), false);
     
@@ -188,7 +188,7 @@ HTItem UGShortestPath(UGGraph* graph, char* vertex1, char* vertex2)
 {
     //first i need yo create a graph with the same
     //keys but with the struct data as HTItem
-    UGGraph* DataGraph = CreateDataGraph(graph);
+    UGGraph* DataGraph = DuplicateGraphWithoutEdges(graph);
     
     
     

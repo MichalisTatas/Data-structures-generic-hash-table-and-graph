@@ -21,6 +21,6 @@ void UGDestroy(UGGraph* graph);
 
 //secondary functions that are used in the above ones
 void printgraph(HashTable* hash);
-UGGraph* CreateDataGraph(UGGraph* graph);
+UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph);
 void recursiveDeleteAdjacentList(UGGraph* graph, char* vertex, node* item);
 HTNode* findVertex(UGGraph* graph, char* vertex);
