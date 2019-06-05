@@ -61,7 +61,7 @@ int main(void)
 
     printgraph(graph->hash);
 
-    UGShortestPath(graph, "foo", "koo");
+    UGShortestPath(graph, "foo", "joo");
 
     UGDestroy(graph);
     return 0;

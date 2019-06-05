@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include "graph.h"
 
 UGGraph* UGCreate(int dataSize ,bool isString)
@@ -156,38 +157,133 @@ HTItem UGGetAdjacent(UGGraph* graph, char* vertex)
     return temp;
 }
 
-UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph)           //copies the given graph to a new one and returns it
+UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph, char* source)           //copies the given graph to a new one and returns it
 {
     UGGraph* DataGraph = UGCreate(sizeof(int), false);
     
-    HTNode* vertextpr;
+    HTNode* vertexptr;
+
+    data* vertexData = malloc(sizeof(data));
+    vertexData->visited = false;
+    vertexData->parent = NULL;
+    vertexData->dist = INT_MAX;
+    
+    data* sourceData = malloc(sizeof(data));
+    sourceData->visited = false;
+    sourceData->parent = NULL;
+    sourceData->dist = 0;
+
     for(int i=0; i<graph->hash->maxSize; i++) {
 
-        vertextpr = graph->hash->array[i];
-        if(vertextpr != NULL) {
-            UGAddVertex(DataGraph, vertextpr->key);
+        vertexptr = graph->hash->array[i];
+        if(vertexptr != NULL) {
+            if(strcmp(vertexptr->key, source) == 0)
+                HTInsert(DataGraph->hash, vertexptr->key, sourceData);
+            else
+                HTInsert(DataGraph->hash, vertexptr->key, vertexData);
 
-            if(vertextpr->next != NULL) {
-                while(vertextpr != NULL) {
-                    UGAddVertex(DataGraph, vertextpr->key);
-                    vertextpr = vertextpr->next;
+            if(vertexptr->next != NULL) {
+                while(vertexptr != NULL) {
+                    HTInsert(DataGraph->hash, vertexptr->key, vertexData);
+                    vertexptr = vertexptr->next;
                 }
             }
         }
     }
-    
+
+    free(vertexData);
+    free(sourceData);
+
     return DataGraph;
 }
 
-HTItem UGShortestPath(UGGraph* graph, char* vertex1, char* vertex2)
+HTNode* VertexWithMinDist(UGGraph* graph)
+{
+    HTNode* temp;
+    data* tempData = malloc(sizeof(data));
+    HTNode* returnNode;
+    int minDist = INT_MAX;
+    for(int i=0; i<graph->hash->maxSize; i++) {
+        temp = graph->hash->array[i];
+        if(temp != NULL) {
+
+            tempData = temp->item;
+            if(tempData->visited == false) {
+                if(tempData->dist < minDist) {
+                    returnNode = temp;
+                    minDist = tempData->dist;
+                }
+            }
+
+            if(temp->next != NULL) {
+                while(temp != NULL) {
+                    tempData = temp->item;
+                    if(tempData->dist < minDist && tempData->visited == false) {
+                        returnNode = temp;
+                        minDist = tempData->dist;
+                    }
+                        temp = temp->next;       
+                }
+            }
+        }
+    }    
+    
+    tempData = returnNode->item;
+    tempData->visited = true;
+    returnNode->item = tempData;
+
+    return returnNode;
+}
+
+HTItem UGShortestPath(UGGraph* graph, char* source, char* destination)
 {
     //first i need to create a graph with the same
     //keys but with the struct data as HTItem
-    UGGraph* DataGraph = DuplicateGraphWithoutEdges(graph); 
+    UGGraph* DataGraph = DuplicateGraphWithoutEdges(graph, source); 
     
-    
+    bool found = false;
+    int alt;
 
-    UGDestroy(DataGraph);
+    HTNode* u;
+    data* uData;
+    
+    HTNode* graphNode;
+    node* graphAdjacentList;
+
+    HTNode* DataGraphNode;
+    data* DataGraphData;
+
+    while(found == false) {
+        u = VertexWithMinDist(DataGraph);
+    printf("%s : \n", u->key);
+        uData = u->item;
+        if(strcmp(u->key, destination) == 0)
+            found = true;
+        
+        if(found == false) {
+
+            graphNode = findVertex(graph, u->key);  //u in graph's hash table
+            graphAdjacentList = graphNode->item;    //list of thew neighbors of u
+        
+            while(graphAdjacentList != NULL) {
+
+                    printf("POUTRS");
+                DataGraphNode = findVertex(DataGraph, graphAdjacentList->adjacentNode->key);  //neighbor of u in DataGraph
+                DataGraphData = DataGraphNode->item;   //data of neighbor of u 
+ 
+                if(DataGraphData->visited != false) {
+                    alt = uData->dist + 1;
+                    if(alt < DataGraphData->dist) {
+                        DataGraphData->dist = alt;
+                        DataGraphData->parent = u;
+                    }
+                }
+                graphAdjacentList = graphAdjacentList->next;
+            }
+        }
+    }
+
+    // UGDestroy(DataGraph);
     // return ?
 }
 

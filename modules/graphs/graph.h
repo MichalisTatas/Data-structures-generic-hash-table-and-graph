@@ -16,11 +16,11 @@ void UGRemoveVertex(UGGraph* graph, char* vertex);
 UGGraph* UGAddEdge(UGGraph* graph, char* vertex1, char* vertex2);
 void UGRemoveEdge(UGGraph* graph, char* vertex1, char* vertex2);
 HTItem UGGetAdjacent(UGGraph* graph, char* vertex);
-HTItem UGShortestPath(UGGraph* graph, char* vertex1, char* vertex2);
+HTItem UGShortestPath(UGGraph* graph, char* source, char* destination);
 void UGDestroy(UGGraph* graph);
 
 //secondary functions that are used in the above ones
 void printgraph(HashTable* hash);
-UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph);
+UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph, char* source);
 void recursiveDeleteAdjacentList(UGGraph* graph, char* vertex, node* item);
 HTNode* findVertex(UGGraph* graph, char* vertex);
