@@ -6,7 +6,7 @@ typedef struct node {     //this is the struct used as HTItem to create the grap
 } node;
 
 typedef struct data {     //keeps the data for shortest path function  
-    node* parent;
+    void* parent;         //cant have HTNode* due to includes so void* it is
     bool visited;
     int dist;
 } data;

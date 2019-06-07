@@ -184,25 +184,29 @@ UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph, char* source)           //co
 
             if(vertexptr->next != NULL) {
                 while(vertexptr != NULL) {
-                    HTInsert(DataGraph->hash, vertexptr->key, vertexData);
+                    if(strcmp(vertexptr->key, source) == 0)
+                        HTInsert(DataGraph->hash, vertexptr->key, sourceData);
+                    else
+                        HTInsert(DataGraph->hash, vertexptr->key, vertexData);
                     vertexptr = vertexptr->next;
                 }
             }
         }
     }
 
-    free(vertexData);
-    free(sourceData);
-
+    // free(vertexData);
+    // free(sourceData);
+ 
     return DataGraph;
 }
 
-HTNode* VertexWithMinDist(UGGraph* graph)
-{
+HTNode* VertexWithMinDist(UGGraph* graph, char* destination)
+{                   
     HTNode* temp;
     data* tempData = malloc(sizeof(data));
-    HTNode* returnNode;
+    HTNode* returnNode = NULL;
     int minDist = INT_MAX;
+
     for(int i=0; i<graph->hash->maxSize; i++) {
         temp = graph->hash->array[i];
         if(temp != NULL) {
@@ -210,7 +214,7 @@ HTNode* VertexWithMinDist(UGGraph* graph)
             tempData = temp->item;
             if(tempData->visited == false) {
                 if(tempData->dist < minDist) {
-                    returnNode = temp;
+                    // returnNode = temp;
                     minDist = tempData->dist;
                 }
             }
@@ -219,20 +223,103 @@ HTNode* VertexWithMinDist(UGGraph* graph)
                 while(temp != NULL) {
                     tempData = temp->item;
                     if(tempData->dist < minDist && tempData->visited == false) {
-                        returnNode = temp;
+                        // returnNode = temp;
                         minDist = tempData->dist;
                     }
-                        temp = temp->next;       
+                        temp = temp->next;
                 }
             }
         }
     }    
-    
-    tempData = returnNode->item;
-    tempData->visited = true;
-    returnNode->item = tempData;
 
-    return returnNode;
+
+
+
+
+
+
+    for(int i=0; i<graph->hash->maxSize; i++) {
+            temp = graph->hash->array[i];
+            if(temp != NULL) {
+
+                tempData = temp->item;
+                    if(tempData->dist == minDist) {
+                if(tempData->visited == false) {
+
+
+                        // if(temp == NULL) 
+                        //     return NULL;
+
+                        
+                        tempData->visited = true;
+                        
+
+                        return temp;
+
+                    }
+                }
+
+                if(temp->next != NULL) {
+                    while(temp != NULL) {
+                        tempData = temp->item;
+                        if(tempData->dist < minDist && tempData->visited == false) {
+                            
+
+                            // if(temp == NULL) 
+                            // return NULL;
+
+                            
+                            tempData->visited = true;
+                            
+
+                            return temp;
+                        }
+                            temp = temp->next;
+                    }
+                }
+            }
+        }    
+
+
+
+
+
+
+
+
+
+        return NULL;
+
+    // tempData = returnNode->item;
+    // tempData->visited = true;
+    // returnNode->item = tempData;
+
+    // return returnNode;
+}
+void printme(HashTable* hash) {
+    HTNode* temp;
+    data* mike;
+    for(int i=0; i<hash->maxSize; i++) {
+         temp = hash->array[i];
+         if(temp != NULL)
+         {
+             mike = temp->item;
+            printf("%d -->", mike->dist);
+            if(mike->visited == true)
+                printf("             visited true    ");
+            else
+                printf("             visited false    ");
+            // if(temp->item != NULL) {
+                // printf(" %s ", (char*)temp->item->adjacentNode->key);
+                // mike = temp->item;
+                // while(mike != NULL) {
+                //     printf(" %s -->", mike->adjacentNode->key);
+                //     mike = mike->next;
+                // }
+            // }
+            printf("\n");
+         }
+    }
 }
 
 HTItem UGShortestPath(UGGraph* graph, char* source, char* destination)
@@ -254,9 +341,22 @@ HTItem UGShortestPath(UGGraph* graph, char* source, char* destination)
     data* DataGraphData;
 
     while(found == false) {
-        u = VertexWithMinDist(DataGraph);
-    printf("%s : \n", u->key);
+
+printme(DataGraph->hash);
+        u = VertexWithMinDist(DataGraph, destination);
+printme(DataGraph->hash);
+
+        if(u == NULL) {
+            printf("error node with min value is null\n");
+            return NULL;
+        }
+
         uData = u->item;
+// printf("I AM HERA IKN BVETWEEN \n");
+        // uData->visited = true;
+
+        printf("%s : %d \n ", u->key, uData->dist);
+
         if(strcmp(u->key, destination) == 0)
             found = true;
         
@@ -267,11 +367,11 @@ HTItem UGShortestPath(UGGraph* graph, char* source, char* destination)
         
             while(graphAdjacentList != NULL) {
 
-                    printf("POUTRS");
                 DataGraphNode = findVertex(DataGraph, graphAdjacentList->adjacentNode->key);  //neighbor of u in DataGraph
                 DataGraphData = DataGraphNode->item;   //data of neighbor of u 
  
-                if(DataGraphData->visited != false) {
+                if(DataGraphData->visited == false) {
+                    printf("POUTRS \n");
                     alt = uData->dist + 1;
                     if(alt < DataGraphData->dist) {
                         DataGraphData->dist = alt;
@@ -280,9 +380,9 @@ HTItem UGShortestPath(UGGraph* graph, char* source, char* destination)
                 }
                 graphAdjacentList = graphAdjacentList->next;
             }
+
         }
     }
-
     // UGDestroy(DataGraph);
     // return ?
 }
@@ -292,6 +392,7 @@ void UGDestroy(UGGraph* graph)
     HTDestroy(graph->hash);
     free(graph);
 }
+
 
 
 
