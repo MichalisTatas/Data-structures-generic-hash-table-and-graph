@@ -163,31 +163,40 @@ UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph, char* source)           //co
     
     HTNode* vertexptr;
 
-    data* vertexData = malloc(sizeof(data));
-    vertexData->visited = false;
-    vertexData->parent = NULL;
-    vertexData->dist = INT_MAX;
-    
-    data* sourceData = malloc(sizeof(data));
-    sourceData->visited = false;
-    sourceData->parent = NULL;
-    sourceData->dist = 0;
-
     for(int i=0; i<graph->hash->maxSize; i++) {
 
         vertexptr = graph->hash->array[i];
         if(vertexptr != NULL) {
-            if(strcmp(vertexptr->key, source) == 0)
+            if(strcmp(vertexptr->key, source) == 0) {
+                data* sourceData = malloc(sizeof(data));
+                sourceData->visited = false;
+                sourceData->parent = NULL;
+                sourceData->dist = 0;
                 HTInsert(DataGraph->hash, vertexptr->key, sourceData);
-            else
+            }
+            else {
+                data* vertexData = malloc(sizeof(data));
+                vertexData->visited = false;
+                vertexData->parent = NULL;
+                vertexData->dist = INT_MAX;
                 HTInsert(DataGraph->hash, vertexptr->key, vertexData);
-
+            }
             if(vertexptr->next != NULL) {
                 while(vertexptr != NULL) {
-                    if(strcmp(vertexptr->key, source) == 0)
+                    if(strcmp(vertexptr->key, source) == 0) {
+                        data* sourceData = malloc(sizeof(data));
+                        sourceData->visited = false;
+                        sourceData->parent = NULL;
+                        sourceData->dist = 0;
                         HTInsert(DataGraph->hash, vertexptr->key, sourceData);
-                    else
+                    }
+                    else {
+                        data* vertexData = malloc(sizeof(data));
+                        vertexData->visited = false;
+                        vertexData->parent = NULL;
+                        vertexData->dist = INT_MAX;
                         HTInsert(DataGraph->hash, vertexptr->key, vertexData);
+                    }
                     vertexptr = vertexptr->next;
                 }
             }
@@ -202,29 +211,25 @@ UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph, char* source)           //co
 
 HTNode* VertexWithMinDist(UGGraph* graph, char* destination)
 {                   
+    HTNode* returnNode = NULL ; //malloc(sizeof(HTNode));
     HTNode* temp;
-    data* tempData = malloc(sizeof(data));
-    HTNode* returnNode = NULL;
     int minDist = INT_MAX;
 
     for(int i=0; i<graph->hash->maxSize; i++) {
         temp = graph->hash->array[i];
         if(temp != NULL) {
-
-            tempData = temp->item;
-            if(tempData->visited == false) {
-                if(tempData->dist < minDist) {
-                    // returnNode = temp;
-                    minDist = tempData->dist;
+            if(((data*)temp->item)->visited == false) {
+                if(((data*)temp->item)->dist < minDist) {
+                    minDist = ((data*)temp->item)->dist;
+                    returnNode = temp;
                 }
             }
 
             if(temp->next != NULL) {
                 while(temp != NULL) {
-                    tempData = temp->item;
-                    if(tempData->dist < minDist && tempData->visited == false) {
-                        // returnNode = temp;
-                        minDist = tempData->dist;
+                    if(((data*)temp->item)->dist < minDist && ((data*)temp->item)->visited == false) {
+                        minDist = ((data*)temp->item)->dist;
+                        returnNode = temp;
                     }
                         temp = temp->next;
                 }
@@ -238,63 +243,33 @@ HTNode* VertexWithMinDist(UGGraph* graph, char* destination)
 
 
 
-    for(int i=0; i<graph->hash->maxSize; i++) {
-            temp = graph->hash->array[i];
-            if(temp != NULL) {
+    // for(int i=0; i<graph->hash->maxSize; i++) {
+    //         temp = graph->hash->array[i];
+    //         if(temp != NULL) {
+    //                 if(((data*)temp->item)->dist == minDist) {
+    //             if(((data*)temp->item)->visited == false) {
+    //                     // ((data*)temp->item)->visited = true;
+    //                     return temp;
 
-                tempData = temp->item;
-                    if(tempData->dist == minDist) {
-                if(tempData->visited == false) {
+    //                 }
+    //             }
 
-
-                        // if(temp == NULL) 
-                        //     return NULL;
-
-                        
-                        tempData->visited = true;
-                        
-
-                        return temp;
-
-                    }
-                }
-
-                if(temp->next != NULL) {
-                    while(temp != NULL) {
-                        tempData = temp->item;
-                        if(tempData->dist < minDist && tempData->visited == false) {
-                            
-
-                            // if(temp == NULL) 
-                            // return NULL;
-
-                            
-                            tempData->visited = true;
-                            
-
-                            return temp;
-                        }
-                            temp = temp->next;
-                    }
-                }
-            }
-        }    
+    //             if(temp->next != NULL) {
+    //                 while(temp != NULL) {
+    //                     if(((data*)temp->item)->dist == minDist && ((data*)temp->item)->visited == false) {
+    //                         // ((data*)temp->item)->visited = true;
+    //                         return temp;
+    //                     }
+    //                         temp = temp->next;
+    //                 }
+    //             }
+    //         }
+    //     }    
 
 
 
+    return returnNode;
 
-
-
-
-
-
-        return NULL;
-
-    // tempData = returnNode->item;
-    // tempData->visited = true;
-    // returnNode->item = tempData;
-
-    // return returnNode;
 }
 void printme(HashTable* hash) {
     HTNode* temp;
@@ -322,7 +297,29 @@ void printme(HashTable* hash) {
     }
 }
 
-HTItem UGShortestPath(UGGraph* graph, char* source, char* destination)
+HTNode* CreateList(HTNode* head) 
+{
+    HTNode* prev;
+    HTNode*  curr;
+    if(head != NULL) {
+        prev = head;
+        curr = ((data*)head->item)->parent;
+        head = ((data*)head->item)->parent;
+        ((data*)prev->item)->parent = NULL;
+
+        while(head != NULL) {
+            head = ((data*)head->item)->parent;
+            ((data*)curr->item)->parent = prev;
+
+            prev = curr;
+            curr = head;
+        }
+        head = prev;
+    }
+    return head;
+}
+
+HTNode* UGShortestPath(UGGraph* graph, char* source, char* destination)
 {
     //first i need to create a graph with the same
     //keys but with the struct data as HTItem
@@ -332,34 +329,25 @@ HTItem UGShortestPath(UGGraph* graph, char* source, char* destination)
     int alt;
 
     HTNode* u;
-    data* uData;
-    
-    HTNode* graphNode;
-    node* graphAdjacentList;
 
-    HTNode* DataGraphNode;
-    data* DataGraphData;
+    HTNode* graphNode = malloc(sizeof(HTNode));
+    node* graphAdjacentList = malloc(sizeof(node));
+
+    HTNode* DataGraphNode = malloc(sizeof(HTNode));
 
     while(found == false) {
 
-printme(DataGraph->hash);
         u = VertexWithMinDist(DataGraph, destination);
-printme(DataGraph->hash);
-
+        
         if(u == NULL) {
             printf("error node with min value is null\n");
             return NULL;
         }
-
-        uData = u->item;
-// printf("I AM HERA IKN BVETWEEN \n");
-        // uData->visited = true;
-
-        printf("%s : %d \n ", u->key, uData->dist);
+        ((data*)u->item)->visited = true;
 
         if(strcmp(u->key, destination) == 0)
             found = true;
-        
+                
         if(found == false) {
 
             graphNode = findVertex(graph, u->key);  //u in graph's hash table
@@ -367,15 +355,13 @@ printme(DataGraph->hash);
         
             while(graphAdjacentList != NULL) {
 
-                DataGraphNode = findVertex(DataGraph, graphAdjacentList->adjacentNode->key);  //neighbor of u in DataGraph
-                DataGraphData = DataGraphNode->item;   //data of neighbor of u 
+                DataGraphNode = findVertex(DataGraph, graphAdjacentList->adjacentNode->key);  //neighbor of u in DataGraph 
  
-                if(DataGraphData->visited == false) {
-                    printf("POUTRS \n");
-                    alt = uData->dist + 1;
-                    if(alt < DataGraphData->dist) {
-                        DataGraphData->dist = alt;
-                        DataGraphData->parent = u;
+                if(((data*)DataGraphNode->item)->visited == false) {
+                    alt = ((data*)u->item)->dist + 1;
+                    if(alt < ((data*)DataGraphNode->item)->dist) {
+                        ((data*)DataGraphNode->item)->dist = alt;
+                        ((data*)DataGraphNode->item)->parent = u;
                     }
                 }
                 graphAdjacentList = graphAdjacentList->next;
@@ -383,8 +369,21 @@ printme(DataGraph->hash);
 
         }
     }
-    // UGDestroy(DataGraph);
-    // return ?
+
+    HTNode* mix;
+
+    mix = CreateList(u);
+    
+    printf("Shortest path is : ");
+    while(mix != NULL)
+    {
+        printf(" %s --> ", mix->key);
+        mix = ((data*)mix->item)->parent;
+    }
+    printf("\n");
+
+    UGDestroy(DataGraph);
+    return mix;
 }
 
 void UGDestroy(UGGraph* graph)
