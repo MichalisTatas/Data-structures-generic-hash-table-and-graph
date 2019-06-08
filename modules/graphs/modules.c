@@ -167,7 +167,8 @@ UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph, char* source)           //co
 
         vertexptr = graph->hash->array[i];
         if(vertexptr != NULL) {
-            if(strcmp(vertexptr->key, source) == 0) {
+            if(strncmp(vertexptr->key, source, strlen(source)) == 0) {
+                printf("KANW PARTIUIIII");
                 data* sourceData = malloc(sizeof(data));
                 sourceData->visited = false;
                 sourceData->parent = NULL;
@@ -182,8 +183,10 @@ UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph, char* source)           //co
                 HTInsert(DataGraph->hash, vertexptr->key, vertexData);
             }
             if(vertexptr->next != NULL) {
+                vertexptr = vertexptr->next;
                 while(vertexptr != NULL) {
-                    if(strcmp(vertexptr->key, source) == 0) {
+                    if(strncmp(vertexptr->key, source, strlen(source)) == 0) {
+                        // printf("KANW PARTIUIIII");
                         data* sourceData = malloc(sizeof(data));
                         sourceData->visited = false;
                         sourceData->parent = NULL;
@@ -211,6 +214,7 @@ UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph, char* source)           //co
 
 HTNode* VertexWithMinDist(UGGraph* graph, char* destination)
 {                   
+    // printf("TATATATATA\n");
     HTNode* returnNode = NULL ; //malloc(sizeof(HTNode));
     HTNode* temp;
     int minDist = INT_MAX;
@@ -336,16 +340,16 @@ HTNode* UGShortestPath(UGGraph* graph, char* source, char* destination)
     HTNode* DataGraphNode = malloc(sizeof(HTNode));
 
     while(found == false) {
-
+// printme(DataGraph->hash);
         u = VertexWithMinDist(DataGraph, destination);
-        
+// printme(DataGraph->hash);
         if(u == NULL) {
             printf("error node with min value is null\n");
             return NULL;
         }
         ((data*)u->item)->visited = true;
-
-        if(strcmp(u->key, destination) == 0)
+    
+        if(strncmp(u->key, destination, strlen(destination)) == 0)
             found = true;
                 
         if(found == false) {
@@ -370,14 +374,14 @@ HTNode* UGShortestPath(UGGraph* graph, char* source, char* destination)
         }
     }
 
-    HTNode* mix;
+    HTNode* mix = u;
 
     mix = CreateList(u);
     
     printf("Shortest path is : ");
     while(mix != NULL)
     {
-        printf(" %s --> ", mix->key);
+        printf(" %s -->", mix->key);
         mix = ((data*)mix->item)->parent;
     }
     printf("\n");

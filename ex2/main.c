@@ -47,26 +47,26 @@ int main(void)
     UGAddEdge(graph, "hoo", "loo");
     UGAddEdge(graph, "foo", "goo");
 
-    printgraph(graph->hash);
+    // printgraph(graph->hash);
 
-    printf("number of vertexes is : %d \n\n", HTSize(graph->hash));
+    // printf("number of vertexes is : %d \n\n", HTSize(graph->hash));
 
-    UGRemoveVertex(graph, "loo");
+    // UGRemoveVertex(graph, "loo");
 
-    printf("number of vertexes after  deletion is : %d \n\n", HTSize(graph->hash));
+    // printf("number of vertexes after  deletion is : %d \n\n", HTSize(graph->hash));
 
-    printf("\nRemoving edge between foo and hoo : \n\n");
+    // printf("\nRemoving edge between foo and hoo : \n\n");
     
-    UGRemoveEdge(graph, "foo", "hoo");
+    // UGRemoveEdge(graph, "foo", "hoo");
 
-    printgraph(graph->hash);
+    // printgraph(graph->hash);
 
-    printf("\nRemoving vertex loo : \n\n");
+    // printf("\nRemoving vertex loo : \n\n");
 
 
-    printgraph(graph->hash);
+    // printgraph(graph->hash);
 
-    // UGShortestPath(graph, "foo", "koo");
+    UGShortestPath(graph, "foo", "koo");
 
     UGDestroy(graph);
     return 0;
