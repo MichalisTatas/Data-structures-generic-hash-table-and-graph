@@ -39,7 +39,6 @@ bool HTGet(HashTable* hash, char* key, HTItem* pitem)
                 if(strcmp(temp->key, key)==0)
                 {
                     pitem = &temp->item;
-                    // AssignValue(hash, temp->item, pitem);
                     return true;
                 }
                 temp = temp->next;    
@@ -81,29 +80,14 @@ HashTable* reHashing(HashTable* hash)
     return table;
 }
 
-// HTItem* AssignValue(HashTable* hash, HTItem initial, HTItem destination) {
-//     //strings are a special ocassion 
-//     //we need to call strlen as 3rd argument of memcpy
-//     if(hash->isString == true) {
-//         memcpy(destination, initial, strlen(initial)+1);
-//     } 
-//     else {
-//         memcpy(destination, initial, hash->dataSize);   //ht->data_size = sizeof(type)
-//     }
-//     return destination;
-// }
-
-
 HashTable* HTInsert(HashTable* hash, char* key, HTItem item)
 {
     HTNode* temp;
     HTNode* node = malloc(sizeof(HTNode));
 
-    // node->key = key;
     node->key = malloc(sizeof(char*));
     strcpy(node->key, key);
     node->item = item;
-    // AssignValue(hash, item, node->item);
     node->next = NULL;
 
     int index = HashFunction(key, hash->maxSize);
@@ -246,12 +230,3 @@ void printstring(HashTable* hash) {
          }
     }
 }
-
-
-
-
-
-
-
-
-

@@ -2,11 +2,6 @@
 #include <stdlib.h>
 #include "hash-tables.h"
 
-// void myvisit(HashTable* hash, char* key, HTItem* pitem)
-// {
-//     printf("%s\n", key);
-// }
-
 void myvisit(HashTable* hash, char* key, HTItem pitem) {
     printf("%p \n", pitem);
 }
@@ -63,43 +58,40 @@ void strings() {
     hash->maxSize = 5;
 
     HTItem intptr1 = malloc(sizeof(char*));
-    intptr1 = (char*)"geia";
+    intptr1 = (char*)"foo";
     hash = HTInsert(hash, "foo", intptr1);
     
     HTItem intptr2 = malloc(sizeof(char*));
-    intptr2 = (char*)"mixalh";
+    intptr2 = (char*)"goo";
     hash = HTInsert(hash, "goo", intptr2);
 
-    HTItem intptr3 = malloc(sizeof(char*));
-    intptr3 = (char*)"tata";
-    hash = HTInsert(hash, "goo", intptr3);
-
     HTItem intptr4 = malloc(sizeof(char*));
-    intptr4 = (char*)"zwo";
+    intptr4 = (char*)"loo";
     hash = HTInsert(hash, "loo", intptr4);
 
     HTItem intptr5 = malloc(sizeof(char*));
-    intptr5 = (char*)"zwo";
+    intptr5 = (char*)"hoo";
     hash = HTInsert(hash, "hoo", intptr5);
     
     HTItem intptr6 = malloc(sizeof(char*));
-    intptr6 = (char*)"mono";
+    intptr6 = (char*)"joo";
     hash = HTInsert(hash, "joo", intptr6);
 
     HTItem intptr7 = malloc(sizeof(char*));
-    intptr7 = (char*)"di";
+    intptr7 = (char*)"moo";
     hash = HTInsert(hash, "moo", intptr7);
 
     HTItem intptr8 = malloc(sizeof(char*));
-    intptr8 = (char*)"xaax";
+    intptr8 = (char*)"soo";
     hash = HTInsert(hash, "soo", intptr8);
 
 
-    printf("Size of hash is : %d\n", HTSize(hash));
+    printf("Size of hash is : %d \n", HTSize(hash));
 
     // HTVisit(hash,visit);
     printstring(hash);
 
+    printf("Removing node with key goo \n");
     HTRemove(hash, "goo");
 
     // HTVisit(hash,visit);
@@ -109,7 +101,9 @@ void strings() {
 }
 
 int main(void) {
+    printf("\nThis is for the integers \n");
     integers();
+    printf("\nThis is for the strings \n");
     strings();    
     return 0;
 }

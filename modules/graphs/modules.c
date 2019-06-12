@@ -168,7 +168,6 @@ UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph, char* source)           //co
         vertexptr = graph->hash->array[i];
         if(vertexptr != NULL) {
             if(strncmp(vertexptr->key, source, strlen(source)) == 0) {
-                printf("KANW PARTIUIIII");
                 data* sourceData = malloc(sizeof(data));
                 sourceData->visited = false;
                 sourceData->parent = NULL;
@@ -186,7 +185,6 @@ UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph, char* source)           //co
                 vertexptr = vertexptr->next;
                 while(vertexptr != NULL) {
                     if(strncmp(vertexptr->key, source, strlen(source)) == 0) {
-                        // printf("KANW PARTIUIIII");
                         data* sourceData = malloc(sizeof(data));
                         sourceData->visited = false;
                         sourceData->parent = NULL;
@@ -206,16 +204,12 @@ UGGraph* DuplicateGraphWithoutEdges(UGGraph* graph, char* source)           //co
         }
     }
 
-    // free(vertexData);
-    // free(sourceData);
- 
     return DataGraph;
 }
 
 HTNode* VertexWithMinDist(UGGraph* graph, char* destination)
 {                   
-    // printf("TATATATATA\n");
-    HTNode* returnNode = NULL ; //malloc(sizeof(HTNode));
+    HTNode* returnNode = NULL;
     HTNode* temp;
     int minDist = INT_MAX;
 
@@ -241,64 +235,8 @@ HTNode* VertexWithMinDist(UGGraph* graph, char* destination)
         }
     }    
 
-
-
-
-
-
-
-    // for(int i=0; i<graph->hash->maxSize; i++) {
-    //         temp = graph->hash->array[i];
-    //         if(temp != NULL) {
-    //                 if(((data*)temp->item)->dist == minDist) {
-    //             if(((data*)temp->item)->visited == false) {
-    //                     // ((data*)temp->item)->visited = true;
-    //                     return temp;
-
-    //                 }
-    //             }
-
-    //             if(temp->next != NULL) {
-    //                 while(temp != NULL) {
-    //                     if(((data*)temp->item)->dist == minDist && ((data*)temp->item)->visited == false) {
-    //                         // ((data*)temp->item)->visited = true;
-    //                         return temp;
-    //                     }
-    //                         temp = temp->next;
-    //                 }
-    //             }
-    //         }
-    //     }    
-
-
-
     return returnNode;
 
-}
-void printme(HashTable* hash) {
-    HTNode* temp;
-    data* mike;
-    for(int i=0; i<hash->maxSize; i++) {
-         temp = hash->array[i];
-         if(temp != NULL)
-         {
-             mike = temp->item;
-            printf("%d -->", mike->dist);
-            if(mike->visited == true)
-                printf("             visited true    ");
-            else
-                printf("             visited false    ");
-            // if(temp->item != NULL) {
-                // printf(" %s ", (char*)temp->item->adjacentNode->key);
-                // mike = temp->item;
-                // while(mike != NULL) {
-                //     printf(" %s -->", mike->adjacentNode->key);
-                //     mike = mike->next;
-                // }
-            // }
-            printf("\n");
-         }
-    }
 }
 
 HTNode* CreateList(HTNode* head) 
@@ -340,9 +278,7 @@ HTNode* UGShortestPath(UGGraph* graph, char* source, char* destination)
     HTNode* DataGraphNode = malloc(sizeof(HTNode));
 
     while(found == false) {
-// printme(DataGraph->hash);
         u = VertexWithMinDist(DataGraph, destination);
-// printme(DataGraph->hash);
         if(u == NULL) {
             printf("error node with min value is null\n");
             return NULL;
