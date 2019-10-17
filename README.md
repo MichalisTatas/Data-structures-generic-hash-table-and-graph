@@ -1,4 +1,4 @@
-## Data structures project
+## Generic Hash Table and Undirected Graph
 
 In this project i have created a generic hash table as well a generic undirected graph using that hash table implementation
 
