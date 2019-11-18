@@ -2,11 +2,11 @@ MODULES = ../modules
 
 CFLAGS = -g -Wall -I.
 
-PROGRAM = ex1
+PROGRAM = executable
 
 OBJS = main.o
 
-include $(MODULES)/hash-tables/make.inc
+include $(MODULES)/dictionary/make.inc
 
 $(PROGRAM): clean $(OBJS)
 	gcc $(OBJS) -o $(PROGRAM)
